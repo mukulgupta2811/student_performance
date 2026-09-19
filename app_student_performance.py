@@ -9,6 +9,7 @@ HTML = """
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -90,11 +91,8 @@ HTML = """
 
         h1 {
             font-size: 42px;
-
             line-height: 1.1;
-
             margin-bottom: 12px;
-
             letter-spacing: 1px;
         }
 
@@ -106,20 +104,15 @@ HTML = """
 
         .description {
             color: #aabbd0;
-
             font-size: 15px;
-
             line-height: 1.6;
-
             margin-bottom: 30px;
         }
 
 
         .form-grid {
             display: grid;
-
             grid-template-columns: 1fr 1fr;
-
             gap: 18px;
         }
 
@@ -131,20 +124,15 @@ HTML = """
 
         label {
             display: block;
-
             margin-bottom: 8px;
-
             color: #cbd8e6;
-
             font-size: 13px;
-
             font-weight: bold;
         }
 
 
         input {
             width: 100%;
-
             padding: 15px;
 
             border-radius: 12px;
@@ -225,7 +213,7 @@ HTML = """
         .result {
             margin-top: 25px;
 
-            padding: 18px;
+            padding: 20px;
 
             border-radius: 15px;
 
@@ -244,24 +232,36 @@ HTML = """
 
             color: #9db1c7;
 
-            margin-bottom: 7px;
+            margin-bottom: 8px;
         }
 
 
-        .result-value {
-            font-size: 30px;
+        .score {
+            font-size: 38px;
 
             font-weight: bold;
+
+            color: #57c7ff;
+
+            margin-bottom: 8px;
         }
 
 
         .pass {
             color: #4dff9a;
+
+            font-size: 22px;
+
+            font-weight: bold;
         }
 
 
         .fail {
             color: #ff6577;
+
+            font-size: 22px;
+
+            font-weight: bold;
         }
 
 
@@ -360,16 +360,13 @@ HTML = """
 
         .student-card h2 {
             font-size: 25px;
-
             margin-bottom: 10px;
         }
 
 
         .student-card p {
             color: #9eb2c7;
-
             font-size: 14px;
-
             line-height: 1.6;
         }
 
@@ -498,7 +495,7 @@ HTML = """
 <div class="container">
 
 
-    <!-- LEFT -->
+    <!-- LEFT SIDE -->
 
     <div class="left">
 
@@ -513,9 +510,11 @@ HTML = """
 
 
         <p class="description">
+
             Enter the student's academic details below and
-            our Machine Learning model will predict whether
-            the student is likely to PASS or FAIL.
+            our Machine Learning model will predict the
+            student's final score and result.
+
         </p>
 
 
@@ -600,23 +599,29 @@ HTML = """
         </form>
 
 
-        {% if result %}
+        {% if result is not none %}
 
         <div class="result">
 
             <div class="result-title">
-                PREDICTION RESULT
+                PREDICTED FINAL SCORE
             </div>
 
-            {% if result == "PASS" %}
 
-                <div class="result-value pass">
+            <div class="score">
+                {{ result }} / 100
+            </div>
+
+
+            {% if result >= 40 %}
+
+                <div class="pass">
                     ✅ PASS
                 </div>
 
             {% else %}
 
-                <div class="result-value fail">
+                <div class="fail">
                     ❌ FAIL
                 </div>
 
@@ -630,8 +635,7 @@ HTML = """
     </div>
 
 
-
-    <!-- RIGHT -->
+    <!-- RIGHT SIDE -->
 
     <div class="right">
 
@@ -649,10 +653,13 @@ HTML = """
 
 
             <p>
+
                 This application uses
                 <b>Machine Learning</b>
                 to analyse academic performance
-                and predict the student's result.
+                and predict the student's
+                final performance.
+
             </p>
 
         </div>
@@ -682,15 +689,24 @@ def home():
 
     if request.method == "POST":
 
-        study_hours = float(request.form["study_hours"])
+        study_hours = float(
+            request.form["study_hours"]
+        )
 
-        attendance = float(request.form["attendance"])
+        attendance = float(
+            request.form["attendance"]
+        )
 
-        previous_score = float(request.form["previous_score"])
+        previous_score = float(
+            request.form["previous_score"]
+        )
 
-        assignments = float(request.form["assignments"])
+        assignments = float(
+            request.form["assignments"]
+        )
 
 
+        # ML model se prediction
         result = student_performance.predict_result(
             study_hours,
             attendance,
